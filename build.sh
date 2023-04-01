@@ -80,6 +80,26 @@ fi
 done
 
 ####
+echo "↓ Proxies IP Mode (1. OnlyIPV6   2.PreferIPV6):"
+read PROXY_IP_MODE_SET
+while true :
+do
+if [ $PROXY_IP_MODE_SET = "1" ]; then
+  PROXY_IP_MODE="6"
+  echo "Proxies IP Mode:  $PROXY_IP_MODE"
+  break
+elif [ $PROXY_IP_MODE_SET = "2" ]; then
+  PROXY_IP_MODE="64"
+  echo "Proxies IP Mode:  $PROXY_IP_MODE"
+  break
+else
+echo "Proxies IP Mode unrecognized, try again!"
+echo "↓ Proxies IP Mode (1. OnlyIPV6   2.PreferIPV6):"
+read PROXY_IP_MODE_SET
+fi
+done
+
+####
 sleep 1
 clear
 PROXY_NETWORK=$(echo $PROXY_NETWORK | awk -F:: '{print $1}')
@@ -227,7 +247,7 @@ done
 # Generating 3proxy users&ports
 CURRENT_PROXY_PORT=${PROXY_START_PORT}
 for e in $(cat ~/ipv6/ip.list); do
-  echo "$([ $PROXY_PROTOCOL == "socks" ] && echo "socks" || echo "proxy") -64 -olSO_REUSEADDR,SO_REUSEPORT -ocTCP_TIMESTAMPS,TCP_NODELAY -osTCP_NODELAY -n -a -p$CURRENT_PROXY_PORT -i$HOST_IPV4_ADDR -e$e" >>~/ipv6/proxy.list
+  echo "$([ $PROXY_PROTOCOL == "socks" ] && echo "socks" || echo "proxy") -$PROXY_IP_MODE -olSO_REUSEADDR,SO_REUSEPORT -ocTCP_TIMESTAMPS,TCP_NODELAY -osTCP_NODELAY -n -a -p$CURRENT_PROXY_PORT -i$HOST_IPV4_ADDR -e$e" >>~/ipv6/proxy.list
   #echo "$PROXY_PROTOCOL://$([ "$PROXY_LOGIN" ] && echo "$PROXY_LOGIN:$PROXY_PASS@" || echo "")$HOST_IPV4_ADDR:$CURRENT_PROXY_PORT" >>~/ipv6/tunnels.txt
   let "CURRENT_PROXY_PORT+=1"
 done
