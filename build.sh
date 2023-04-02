@@ -193,6 +193,8 @@ cat >/etc/3proxy/3proxy.cfg <<END
 #!/bin/bash
 #daemon
 log /var/log/3proxy/3proxy-%y%m%d.log D
+logformat "L[%Y-%m-%D %H:%M:%S.%.] - "Proxy":["type": %N, "port": %p], "Error":["code": %E}, "Auth":["user": %U], "Client":["ip": %C, "port": %c], "Server":["ip": %R, "port": %r], "Bytes":["sent": %O, "received": %I], "Request":["hostname": %n], "Message":[ %T]"
+rotate 30
 maxconn 666
 nserver 8.8.8.8
 nserver 1.1.1.1
