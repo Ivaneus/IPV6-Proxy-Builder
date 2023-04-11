@@ -153,12 +153,11 @@ DefaultLimitNPROC=102400
 DefaultLimitSIGPENDING=1200000
 UserTasksMax=1000000
 DefaultTasksMax=1000000
-
 END
 sort -u /etc/systemd/system.conf -o /etc/systemd/system.conf
 sed -i '1i\[Manager]' /etc/systemd/system.conf
-
 ####
+
 echo ">-- Setting up ndppd"
 apt-get -y install ndppd >/dev/null 2>&1
 #git clone --quiet https://github.com/DanielAdolfsson/ndppd.git >/dev/null
@@ -204,10 +203,6 @@ timeouts 1 5 30 60 180 1800 15 60
 setgid 65535
 setuid 65535
 stacksize 102400
-bandlimin 60000000 * * * 80
-bandlimin 60000000 * * * 443
-bandlimout 30000000 * * * 80
-bandlimout 30000000 * * * 443
 flush
 auth strong
 END
@@ -274,6 +269,18 @@ cat ~/ipv6/proxylist/proxy_* >>/etc/3proxy/3proxy.cfg
 
 
 ####
+sed -i '/ulimit/d' /etc/profile
+cat >>/etc/profile <<END
+ulimit -n 1024000
+ulimit -u 1024000
+ulimit -i 1024000
+ulimit -s 102400
+ulimit -l 1024000
+ulimit -c 1024000
+ulimit -q 1024000
+END
+source /etc/profile
+
 echo ">-- Setting up rc.local"
 if [ -f "/etc/rc.local" ];then
   chattr -R -i /etc/rc.local
