@@ -94,8 +94,21 @@ install_gost() {
     chmod -R 777 /usr/bin/gost
     
     wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-    mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
-    echo "gost installation completed!"
+    mkdir /etc/gost && echo '{"log": {"level":"debug"}}' >config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+    systemctl enable gost && systemctl restart gost
+
+  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
+    echo "gost install success"
+    rm -rf "$(pwd)"/gost
+    rm -rf "$(pwd)"/gost.service
+    rm -rf "$(pwd)"/config.json
+  else
+    echo "gost install failed"
+    rm -rf "$(pwd)"/gost
+    rm -rf "$(pwd)"/gost.service
+    rm -rf "$(pwd)"/config.json
+    rm -rf "$(pwd)"/gost.sh
+  fi
 }
 
 # Retrieve available versions from GitHub API
