@@ -115,7 +115,8 @@ function install_gost() {
 function chkgost() {
   if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
     echo "gost already installed"
-    if [ ! $(gost -V | grep  $latest_version) ]; then
+    echo $latest_version
+    if [ ! $(gost -V | grep $latest_version) ]; then
     echo "not latest_ver"
     else
     echo "already latest_ver"
