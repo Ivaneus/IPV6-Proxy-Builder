@@ -97,8 +97,31 @@ function install_gost() {
     mv gost /usr/bin/gost
     chmod -R 777 /usr/bin/gost
     
-    wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-    mkdir /etc/gost && echo '{"log": {"level":"debug"}}' >config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+cat >gost.service<<END
+[Unit]
+Description=gost
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Type=simple
+User=root
+Restart=always
+RestartSec=5
+DynamicUser=true
+ExecStart=/usr/bin/gost -C /etc/gost/config.yml
+
+[Install]
+WantedBy=multi-user.target    
+END
+
+cat >config.yml<<END
+log:
+  level: debug
+END 
+
+    chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+    mkdir /etc/gost && mv config.yml /etc/gost && chmod -R 777 /etc/gost
     systemctl enable gost && systemctl restart gost
 
   if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
