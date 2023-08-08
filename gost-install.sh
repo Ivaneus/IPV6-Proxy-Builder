@@ -114,16 +114,19 @@ function install_gost() {
     rm -rf "$(pwd)"/gost.sh
   fi
 }
-function chkgost() {
-  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
-    echo "gost already installed"
-    ver=$(gost -V | awk '{print $2}')
-    if [ ! $(echo $latest_version | grep $ver) ]; then
-    echo "not latest_ver"
-    else
-    echo "already latest_ver"
-    fi
-  fi
+function update_gost() {
+    version=$1
+    get_download_url="$base_url/tags/$version"
+    download_url=$(curl -s "$get_download_url" | grep -Eo "\"browser_download_url\": \".*${os}.*${cpu_arch}.*\"" | awk -F'["]' '{print $4}')
+    # Download the binary
+    echo "Downloading gost version $version..."
+    curl -fsSL -o gost.tar.gz $download_url
+    # Extract and install the binary
+    echo "Installing gost..."
+    tar -xzf gost.tar.gz
+    chmod +x gost
+    mv gost /usr/bin/gost
+    chmod -R 777 /usr/bin/gost
 }
 
 # Check if --install option provided
@@ -134,7 +137,7 @@ if [[ "$1" == "--install" ]]; then
     ver=$(gost -V | awk '{print $2}')
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
-    install_gost $latest_version
+    update_gost $latest_version
     else
     echo "already latest_ver"
     fi
