@@ -8,6 +8,7 @@ if [[ "$EUID" -ne '0' ]]; then
 fi
 # Retrieve available versions from GitHub API
 versions=$(curl -s "$base_url" | grep -oP 'tag_name": "\K[^"]+')
+latest_version=$(echo "$versions" | head -n 1)
 # Set the desired GitHub repository
 repo="go-gost/gost"
 base_url="https://api.github.com/repos/$repo/releases"
@@ -114,7 +115,6 @@ function install_gost() {
 function chkgost() {
   if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
     echo "gost already installed"
-    latest_version=$(echo "$versions" | head -n 1)
     if [ ! $(gost -V | grep  ${latest_version}) ]; then
     echo "not latest_ver"
     else
@@ -127,7 +127,6 @@ function chkgost() {
 chkgost
 if [[ "$1" == "--install" ]]; then
     # Install the latest version automatically
-    latest_version=$(echo "$versions" | head -n 1)
     install_gost $latest_version
 else
     # Display available versions to the user
