@@ -137,7 +137,7 @@ if [[ "$1" == "--install" ]]; then
     ver=$(gost -V | awk '{print $2}')
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
-    update_gost $latest_version
+    install_gost $latest_version
     else
     echo "already latest_ver"
     fi
