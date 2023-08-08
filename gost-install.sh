@@ -7,13 +7,30 @@ if [[ "$EUID" -ne '0' ]]; then
     echo "$(tput setaf 1)Error: You must run this script as root!$(tput sgr0)"
     exit 1
 fi
-
+function check_file()
+{
+    if test ! -d "/usr/lib/systemd/system/";then
+        `mkdir /usr/lib/systemd/system`
+        `chmod -R 777 /usr/lib/systemd/system`
+    fi
+}
+function check_nor_file()
+{
+    `rm -rf "$(pwd)"/gost`
+    `rm -rf "$(pwd)"/gost.service`
+    `rm -rf "$(pwd)"/config.json`
+    `rm -rf /etc/gost`
+    `rm -rf /usr/lib/systemd/system/gost.service`
+    `rm -rf /usr/bin/gost`
+}
 # Set the desired GitHub repository
 repo="go-gost/gost"
 base_url="https://api.github.com/repos/$repo/releases"
 
 # Function to download and install gost
 install_gost() {
+    check_nor_file
+    check_file
     version=$1
     # Detect the operating system
     if [[ "$(uname)" == "Linux" ]]; then
