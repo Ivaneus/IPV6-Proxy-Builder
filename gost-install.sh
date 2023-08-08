@@ -1,12 +1,18 @@
 #!/bin/bash
 
 # Check Root User
-
 # If you want to run as another user, please modify $EUID to be owned by this user
 if [[ "$EUID" -ne '0' ]]; then
     echo "$(tput setaf 1)Error: You must run this script as root!$(tput sgr0)"
     exit 1
 fi
+# Retrieve available versions from GitHub API
+versions=$(curl -s "$base_url" | grep -oP 'tag_name": "\K[^"]+')
+# Set the desired GitHub repository
+repo="go-gost/gost"
+base_url="https://api.github.com/repos/$repo/releases"
+
+# Function to download and install gost
 function check_file()
 {
     if test ! -d "/usr/lib/systemd/system/";then
@@ -23,12 +29,7 @@ function check_nor_file()
     `rm -rf /usr/lib/systemd/system/gost.service`
     `rm -rf /usr/bin/gost`
 }
-# Set the desired GitHub repository
-repo="go-gost/gost"
-base_url="https://api.github.com/repos/$repo/releases"
-
-# Function to download and install gost
-install_gost() {
+function install_gost() {
     check_nor_file
     check_file
     version=$1
@@ -110,10 +111,6 @@ install_gost() {
     rm -rf "$(pwd)"/gost.sh
   fi
 }
-
-# Retrieve available versions from GitHub API
-versions=$(curl -s "$base_url" | grep -oP 'tag_name": "\K[^"]+')
-
 # Check if --install option provided
 if [[ "$1" == "--install" ]]; then
     # Install the latest version automatically
