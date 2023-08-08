@@ -111,6 +111,18 @@ function install_gost() {
     rm -rf "$(pwd)"/gost.sh
   fi
 }
+function {
+  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
+    echo "gost already installed"
+    latest_version=$(echo "$versions" | head -n 1)
+    if [ ! $(gost -V | grep  ${latest_version}) ]; then
+    echo "not latest_ver"
+    else
+    echo "already latest_ver"
+    fi
+  fi
+}
+
 # Check if --install option provided
 if [[ "$1" == "--install" ]]; then
     # Install the latest version automatically
