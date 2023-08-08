@@ -137,6 +137,8 @@ if [[ "$1" == "--install" ]]; then
     ver=$(gost -V | awk '{print $2}')
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
+    mv /usr/lib/systemctl/gost.service /usr/lib/systemctl/gost.service.bak
+    mv /etc/gost/config.json /etc/gost/config.json.bak
     install_gost $latest_version
     else
     echo "already latest_ver"
