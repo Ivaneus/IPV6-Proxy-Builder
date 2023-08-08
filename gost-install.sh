@@ -114,12 +114,10 @@ ExecStart=/usr/bin/gost -C /etc/gost/config.yml
 [Install]
 WantedBy=multi-user.target    
 END
-
 cat >config.yml<<END
 log:
-  level: debug
-END 
-
+   level: debug
+END
     chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
     mkdir /etc/gost && mv config.yml /etc/gost && chmod -R 777 /etc/gost
     systemctl enable gost && systemctl restart gost
