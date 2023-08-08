@@ -107,8 +107,9 @@ Wants=network-online.target systemd-networkd-wait-online.service
 Type=simple
 User=root
 Restart=always
-RestartSec=5
-DynamicUser=true
+RestartSec=60
+ExecReload=/bin/kill -SIGUSR1 $MAINPID
+KillMode=process
 ExecStart=/usr/bin/gost -C /etc/gost/config.yml
 
 [Install]
