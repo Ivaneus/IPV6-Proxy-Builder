@@ -1,17 +1,19 @@
 #!/bin/bash
 
+# Set the desired GitHub repository
+repo="go-gost/gost"
+base_url="https://api.github.com/repos/$repo/releases"
+
+# Retrieve available versions from GitHub API
+versions=$(curl -s "$base_url" | grep -oP 'tag_name": "\K[^"]+')
+latest_version=$(echo "$versions" | head -n 1)
+
 # Check Root User
 # If you want to run as another user, please modify $EUID to be owned by this user
 if [[ "$EUID" -ne '0' ]]; then
     echo "$(tput setaf 1)Error: You must run this script as root!$(tput sgr0)"
     exit 1
 fi
-# Retrieve available versions from GitHub API
-versions=$(curl -s "$base_url" | grep -oP 'tag_name": "\K[^"]+')
-latest_version=$(echo "$versions" | head -n 1)
-# Set the desired GitHub repository
-repo="go-gost/gost"
-base_url="https://api.github.com/repos/$repo/releases"
 
 # Function to download and install gost
 function check_file()
