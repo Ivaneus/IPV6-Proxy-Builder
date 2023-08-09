@@ -110,17 +110,17 @@ Restart=always
 RestartSec=60
 ExecReload=/bin/kill -SIGUSR1 $MAINPID
 KillMode=process
-ExecStart=/usr/bin/gost -C /etc/gost/config.yml
+ExecStart=/usr/bin/gost -C /etc/gost/gost.yml
 
 [Install]
 WantedBy=multi-user.target    
 END
-cat >config.yml<<END
+cat >gost.yml<<END
 log:
    level: debug
 END
     chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-    mkdir /etc/gost && mv config.yml /etc/gost && chmod -R 777 /etc/gost
+    mkdir /etc/gost && mv gost.yml /etc/gost && chmod -R 777 /etc/gost
     systemctl enable gost && systemctl restart gost
 
   if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
