@@ -110,6 +110,7 @@ Restart=always
 RestartSec=60
 ExecReload=/bin/kill -SIGUSR1 $MAINPID
 KillMode=process
+WorkingDirectory=/etc/gost
 ExecStart=/usr/bin/gost -C /etc/gost/gost.yaml
 
 [Install]
