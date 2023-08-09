@@ -160,7 +160,7 @@ if [[ "$1" == "--install" ]]; then
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
     mv /usr/lib/systemd/system/gost.service /usr/lib/systemd/system/gost.service.bak
-    mv /etc/gost//gost.yaml /etc/gost//gost.yaml.bak
+    mv /etc/gost/gost.yaml /etc/gost/gost.yaml.bak
     install_gost $latest_version
     else
     echo "already latest_ver"
