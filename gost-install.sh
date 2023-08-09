@@ -27,7 +27,7 @@ function check_nor_file()
 {
     `rm -rf "$(pwd)"/gost`
     `rm -rf "$(pwd)"/gost.service`
-    `rm -rf "$(pwd)"/config.json`
+    `rm -rf "$(pwd)"/gost.yaml`
     `rm -rf /etc/gost`
     `rm -rf /usr/lib/systemd/system/gost.service`
     `rm -rf /usr/bin/gost`
@@ -123,16 +123,16 @@ END
     mkdir /etc/gost && mv gost.yaml /etc/gost && chmod -R 777 /etc/gost
     systemctl enable gost && systemctl restart gost
 
-  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
+  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/gost.yaml; then
     echo "gost install success"
     rm -rf "$(pwd)"/gost
     rm -rf "$(pwd)"/gost.service
-    rm -rf "$(pwd)"/config.json
+    rm -rf "$(pwd)"/gost.yaml
   else
     echo "gost install failed"
     rm -rf "$(pwd)"/gost
     rm -rf "$(pwd)"/gost.service
-    rm -rf "$(pwd)"/config.json
+    rm -rf "$(pwd)"//gost.yaml
     rm -rf "$(pwd)"/gost.sh
   fi
 }
@@ -160,7 +160,7 @@ if [[ "$1" == "--install" ]]; then
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
     mv /usr/lib/systemd/system/gost.service /usr/lib/systemd/system/gost.service.bak
-    mv /etc/gost/config.json /etc/gost/config.json.bak
+    mv /etc/gost//gost.yaml /etc/gost//gost.yaml.bak
     install_gost $latest_version
     else
     echo "already latest_ver"
