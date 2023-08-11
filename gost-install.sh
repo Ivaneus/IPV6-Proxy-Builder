@@ -27,7 +27,7 @@ function check_nor_file()
 {
     `rm -rf "$(pwd)"/gost`
     `rm -rf "$(pwd)"/gost.service`
-    `rm -rf "$(pwd)"/gost.yaml`
+    `rm -rf "$(pwd)"/gost.json`
     `rm -rf /etc/gost`
     `rm -rf /usr/lib/systemd/system/gost.service`
     `rm -rf /usr/bin/gost`
@@ -111,29 +111,29 @@ RestartSec=60
 ExecReload=/bin/kill -SIGUSR1 $MAINPID
 KillMode=process
 WorkingDirectory=/etc/gost
-ExecStart=/usr/bin/gost -C /etc/gost/gost.yaml
+ExecStart=/usr/bin/gost -C /etc/gost/gost.json
 
 [Install]
 WantedBy=multi-user.target    
 END
-cat >gost.yaml<<END
+cat >gost.json<<END
 log:
    level: debug
 END
     chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-    mkdir /etc/gost && mv gost.yaml /etc/gost && chmod -R 777 /etc/gost
+    mkdir /etc/gost && mv gost.json /etc/gost && chmod -R 777 /etc/gost
     systemctl enable gost && systemctl restart gost
 
-  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/gost.yaml; then
+  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/gost.json; then
     echo "gost install success"
     rm -rf "$(pwd)"/gost
     rm -rf "$(pwd)"/gost.service
-    rm -rf "$(pwd)"/gost.yaml
+    rm -rf "$(pwd)"/gost.json
   else
     echo "gost install failed"
     rm -rf "$(pwd)"/gost
     rm -rf "$(pwd)"/gost.service
-    rm -rf "$(pwd)"//gost.yaml
+    rm -rf "$(pwd)"//gost.json
     rm -rf "$(pwd)"/gost.sh
   fi
 }
@@ -161,7 +161,7 @@ if [[ "$1" == "--install" ]]; then
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
     mv /usr/lib/systemd/system/gost.service /usr/lib/systemd/system/gost.service.bak
-    mv /etc/gost/gost.yaml /etc/gost/gost.yaml.bak
+    mv /etc/gost/gost.json /etc/gost/gost.json.bak
     install_gost $latest_version
     else
     echo "already latest_ver"
