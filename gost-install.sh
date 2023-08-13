@@ -155,7 +155,8 @@ function update_gost() {
 # Check if --install option provided
 if [[ "$1" == "--install" ]]; then
     # Install the latest version automatically
-    if test -a /usr/bin/gost -a /usr/lib/systemd/system/gost.service -a /etc/gost/config.json; then
+	echo "run"
+  if test -a /usr/bin/gost -a /usr/lib/systemd/system/gost.service -a /etc/gost/config.json; then
     echo "gost already installed"
     ver=$(gost -V | awk '{print $2}')
     if [ ! $(echo $latest_version | grep $ver) ]; then
@@ -166,6 +167,8 @@ if [[ "$1" == "--install" ]]; then
     else
     echo "already latest_ver"
     fi
+  else
+    install_gost $latest_version  
   fi
 else
     # Display available versions to the user
