@@ -133,7 +133,7 @@ END
     echo "gost install failed"
     rm -rf "$(pwd)"/gost
     rm -rf "$(pwd)"/gost.service
-    rm -rf "$(pwd)"//gost.json
+    rm -rf "$(pwd)"/gost.json
     rm -rf "$(pwd)"/gost.sh
   fi
 }
@@ -161,11 +161,9 @@ if [[ "$1" == "--install" ]]; then
     ver=$(gost -V | awk '{print $2}')
     if [ ! $(echo $latest_version | grep $ver) ]; then
     echo "not latest_ver"
-    mv /usr/lib/systemd/system/gost.service /usr/lib/systemd/system/gost.service.bak
-    mv /etc/gost/gost.json /etc/gost/gost.json.bak
+    cp /etc/gost/gost.json /tmp/gost.json.bak
     install_gost $latest_version
-    cp /usr/lib/systemd/system/gost.service.bak /usr/lib/systemd/system/gost.service
-    cp /etc/gost/gost.json.bak /etc/gost/gost.json
+    cp /tmp/gost.json.bak /etc/gost/gost.json
     else
     echo "already latest_ver"
     fi
