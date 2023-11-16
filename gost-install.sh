@@ -164,6 +164,8 @@ if [[ "$1" == "--install" ]]; then
     mv /usr/lib/systemd/system/gost.service /usr/lib/systemd/system/gost.service.bak
     mv /etc/gost/gost.json /etc/gost/gost.json.bak
     install_gost $latest_version
+    cp /usr/lib/systemd/system/gost.service.bak /usr/lib/systemd/system/gost.service
+    cp /etc/gost/gost.json.bak /etc/gost/gost.json
     else
     echo "already latest_ver"
     fi
